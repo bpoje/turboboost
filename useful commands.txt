@@ -1,0 +1,30 @@
+sudo make					#create kernel module
+sudo make clean
+
+modinfo turboBoostDe.ko				#info about module
+
+sudo insmod turboBoostDe.ko			#load module & disable Intel Turbo Boost
+sudo insmod turboBoostDe.ko parDisable=Y	#load module & disable Intel Turbo Boost
+sudo insmod turboBoostDe.ko parDisable=N	#load module & enable Intel Turbo Boost
+
+tail /var/log/syslog
+
+cat /sys/module/turboBoostDe/parameters/parDisable	#kernel parameter value
+
+sudo rmmod turboBoostDe.ko			#unload module
+
+tail /var/log/syslog
+
+
+
+#Other way to check register value:
+sudo apt-get install msr-tools
+
+sudo modprobe msr				#The msr driver is not auto-loaded. On modular
+						#kernels you might need to use the following
+						#command to load it explicitly before use
+
+sudo rdmsr -p0 -f 38:38 0x1a0
+sudo rdmsr -p1 -f 38:38 0x1a0
+...
+sudo rdmsr -p7 -f 38:38 0x1a0
